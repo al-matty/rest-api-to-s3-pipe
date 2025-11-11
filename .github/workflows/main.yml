@@ -30,8 +30,8 @@ jobs:
           #AWS_ACCOUNT_ID: ${{secrets.AWS_ACCOUNT_ID}}
           #AWS_PYTHON_USER_NAME: ${{secrets.AWS_PYTHON_USER_NAME}}
           #AWS_REGION: ${{secrets.AWS_REGION}}
-          BUCKET: ${{secrets.AWS_BUCKET_NAME}}
-          AWS_USER_ACCESS_KEY: ${{secrets.AWS_PYTHON_USER_ACCESS_KEY}}
-          AWS_USER_SECRET_ACCESS_KEY: ${{secrets.AWS_PYTHON_USER_SECRET_KEY}}
+          BUCKET: ${{secrets.BUCKET}}
+          AWS_USER_ACCESS_KEY: ${{secrets.AWS_USER_ACCESS_KEY}}
+          AWS_USER_SECRET_ACCESS_KEY: ${{secrets.AWS_USER_SECRET_ACCESS_KEY}}
         run: python fetch_data.py
     
