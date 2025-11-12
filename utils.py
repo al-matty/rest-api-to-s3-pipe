@@ -116,8 +116,8 @@ def push_to_s3(data_dir: str = "data") -> None:
     # Initialize S3 client
     s3_client = boto3.client(
         "s3",
-        aws_access_key_id=os.getenv("AWS_USER_ACCESS_KEY"),
-        aws_secret_access_key=os.getenv("AWS_USER_SECRET_ACCESS_KEY"),
+        aws_access_key_id=os.getenv("AWS_USER_ACCESS_KEY").strip("\n"),
+        aws_secret_access_key=os.getenv("AWS_USER_SECRET_ACCESS_KEY").strip("\n"),
     )
 
     # Get all JSON files
