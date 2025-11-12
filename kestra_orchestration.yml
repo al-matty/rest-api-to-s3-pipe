@@ -1,0 +1,47 @@
+# Kestra Orchestration for BikePoint API → S3 Pipeline
+#
+# This workflow clones the BikePoint API repo and runs the data pipeline
+# that fetches London bike availability data and uploads it to S3.
+#
+# Setup Instructions:
+# 1. Create the following secrets in Kestra (prefix with SECRET_ and base64 encode):
+#    - SECRET_GITHUB_USER: Your GitHub username (base64 encoded)
+#    - SECRET_GITHUB_PAT: GitHub Personal Access Token (base64, with repo access)
+#    - SECRET_AWS_USER_ACCESS_KEY: AWS access key (base64, with S3 write permissions)
+#    - SECRET_AWS_USER_SECRET_ACCESS_KEY: AWS secret access key (base64)
+#    - SECRET_BUCKET: Target S3 bucket name (base64)
+#    Note: Kestra automatically decodes base64 secrets when accessed via secret()
+#
+# 2. Update the namespace below to match your Kestra organization structure
+# 3. Schedule the workflow (add a triggers section) or run manually
+
+id: git_clone
+namespace: company.team
+
+tasks:
+  - id: directory
+    type: io.kestra.plugin.core.flow.WorkingDirectory
+    tasks:
+    # - id: check-env
+    #   type: io.kestra.plugin.scripts.python.Commands
+    #   commands:
+    #     - echo "{{ secret('AWS_USER_ACCESS_KEY') }}"
+    - id: clone
+      type: io.kestra.plugin.git.Clone
+      url: https://github.com/al-matty/bikepoint_api
+      branch: main
+      username: "{{ secret('GITHUB_USER') }}"
+      password: "{{ secret('GITHUB_PAT') }}"
+    
+    - id: run-main
+      type: io.kestra.plugin.scripts.python.Commands
+      beforeCommands:
+        - pip install -r requirements.txt
+        - ls
+      env:
+        AWS_USER_ACCESS_KEY: "{{ secret('AWS_USER_ACCESS_KEY') }}"
+        AWS_USER_SECRET_ACCESS_KEY: "{{ secret('AWS_USER_SECRET_ACCESS_KEY') }}"
+        BUCKET: "{{ secret('BUCKET') }}"
+      commands:
+        - python main.py
+      pythonVersion: "3.12"
