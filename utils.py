@@ -110,15 +110,15 @@ def push_to_s3(data_dir: str = "data") -> None:
     """Upload all JSON files from data directory to S3."""
     bucket = os.getenv("BUCKET")
 
-    try:
-        # Test S3 connection
-        buckets_list = s3_client.list_buckets()
-        logger.info(f"Connected to S3 successfully (seeing {len(buckets_list['Buckets'])} buckets).")
-    except Exception:
-        error_msg = "Could not list S3 buckets. Check your AWS credentials."
-        print(error_msg)
-        logger.error(error_msg)
-        sys.exit(1)
+    # try:
+    #     # Test S3 connection
+    #     buckets_list = s3_client.list_buckets()
+    #     logger.info(f"Connected to S3 successfully (seeing {len(buckets_list['Buckets'])} buckets).")
+    # except Exception:
+    #     error_msg = "Could not list S3 buckets. Check your AWS credentials."
+    #     print(error_msg)
+    #     logger.error(error_msg)
+    #     sys.exit(1)
 
     # Get all JSON files
     files = [f for f in os.listdir(data_dir) if f.endswith('.json')]
